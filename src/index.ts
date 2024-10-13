@@ -3,7 +3,7 @@ import http from "node:http";
 const hostname = "127.0.0.1";
 const port = 3000;
 
-const requestListener = (req: http.IncomingMessage, res: http.ServerResponse) => {
+const requestListener = (_req: http.IncomingMessage, res: http.ServerResponse) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.end(
