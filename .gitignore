@@ -32,6 +32,8 @@ build/
 temp/
 
 # IDEs and editors
+.vscode/*
+!.vscode/extensions.json
 .idea/
 *.suo
 *.ntvs*
@@ -76,3 +78,6 @@ package-lock.json
 pnpm-lock.yaml
 yarn.lock
 *.lock
+
+# Husky internal files
+.husky/_
