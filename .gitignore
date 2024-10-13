@@ -32,7 +32,6 @@ build/
 temp/
 
 # IDEs and editors
-.vscode/
 .idea/
 *.suo
 *.ntvs*
