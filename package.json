@@ -10,7 +10,8 @@
     "format": "biome format --write ./src",
     "lint": "biome lint --write ./src",
     "check": "biome check --write ./src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "Heberth Lopez<heberth.lopez.19@gmail.com>",
@@ -18,11 +19,18 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.3",
     "@types/node": "^22.7.5",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heblopez/back-explora-peru.git"
+  },
+  "lint-staged": {
+    "*": [
+      "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+    ]
   }
 }
