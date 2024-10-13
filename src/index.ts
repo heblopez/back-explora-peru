@@ -1,22 +1,22 @@
-import http from 'node:http';
+import express, { type Request, type Response } from 'express';
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const HOSTNAME = process.env.HOSTNAME || 'localhost';
+const PORT = Number(process.env.PORT) || 3000;
 
-const requestListener = (
-  _req: http.IncomingMessage,
-  res: http.ServerResponse
-) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.end(
-    `<h1>Explora Peru API 🚀</h1>
+const app = express();
+
+const welcomeListener = (_req: Request, res: Response) => {
+  res
+    .status(200)
+    .setHeader('Content-Type', 'text/html; charset=utf-8')
+    .send(
+      `<h1>Explora Peru API 🚀</h1>
     <p>This is the backend of the Explora Peru project.</p>`
-  );
+    );
 };
 
-const server = http.createServer(requestListener);
+app.get('/', welcomeListener);
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(PORT, () => {
+  console.log(`✅ Explora Peru API is running on http://${HOSTNAME}:${PORT}`);
 });
