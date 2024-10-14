@@ -26,11 +26,11 @@ model User {
   email          String        @unique @db.VarChar(255)
   password       String        @db.VarChar(255)
   phoneNumber    String        @map("phone_number") @db.VarChar(20)
-  profilePicture String        @map("profile_picture")
+  profilePicture String?        @map("profile_picture")
   userType       UserType      @default(CUSTOMER) @map("user_type")
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @map("updated_at")
-  lastLogin      DateTime      @map("last_login")
+  lastLogin      DateTime?      @map("last_login")
   travelAgency   TravelAgency?
   tourist        Tourist?
 
@@ -41,11 +41,11 @@ model TravelAgency {
   travelAgencyId    Int     @id @default(autoincrement()) @map("travel_agency_id")
   userId            Int     @unique @map("user_id")
   agencyName        String  @map("agency_name") @db.VarChar(150)
-  agencyDescription String  @map("agency_description")
+  agencyDescription String?  @map("agency_description")
   ruc               String  @db.VarChar(20)
   address           String  @db.VarChar(255)
-  logoUrl           String  @map("logo_url")
-  website           String  @db.VarChar(255)
+  logoUrl           String?  @map("logo_url")
+  website           String?  @db.VarChar(255)
   verified          Boolean @default(false)
   user              User    @relation(fields: [userId], references: [userId])
 
@@ -67,9 +67,9 @@ model Tourist {
   lastName       String       @map("last_name") @db.VarChar(100)
   documentType   DocumentType @map("document_type")
   documentNumber String       @map("document_number") @db.VarChar(50)
-  birthDate      DateTime     @map("birth_date") @db.Date
-  country        String       @db.VarChar(100)
-  gender         String       @db.VarChar(10)
+  birthdate      DateTime     @map("birthdate") @db.Date
+  country        String?       @db.VarChar(100)
+  gender         String?       @db.VarChar(10)
   user           User         @relation(fields: [userId], references: [userId])
 
   @@map("tourists")
