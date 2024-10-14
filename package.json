@@ -11,7 +11,8 @@
     "lint": "biome lint --write ./src",
     "check": "biome check --write ./src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prisma-format": "prisma-case-format --file ./prisma/schema.prisma --config-file ./prisma/.prisma-case-format"
   },
   "keywords": [],
   "author": "Heberth Lopez<heberth.lopez.19@gmail.com>",
