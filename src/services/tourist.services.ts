@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const createTourist = async (
   userId: number,
   data: TouristEntry
-): Promise<Tourist> => {
+): Promise<Omit<Tourist, 'userId' | 'touristId'>> => {
   try {
     const userFound = await prisma.user.findUnique({
       where: {
@@ -29,7 +29,8 @@ export const createTourist = async (
       }
     });
 
-    return tourist;
+    const { userId: _, touristId, ...touristData } = tourist;
+    return touristData;
   } catch (error) {
     console.error(error);
     throw new Error('Error when creating the tourist');

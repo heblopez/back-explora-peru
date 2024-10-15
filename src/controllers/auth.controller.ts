@@ -10,10 +10,6 @@ export const registerTourist = async (req: Request, res: Response) => {
 
     const { email, password, phoneNumber, ...dataTourist } = dataNewTourist;
 
-    if (!email || !password || !phoneNumber) {
-      res.status(400).json({ message: 'Missing required fields' });
-    }
-
     const dataUser = {
       email,
       password,
@@ -24,7 +20,7 @@ export const registerTourist = async (req: Request, res: Response) => {
     const newTourist = await createTourist(userId, dataTourist);
 
     res.status(201).json({
-      message: 'Registered successfully',
+      message: 'Tourist registered successfully!',
       data: { ...dataUserWithoutId, ...newTourist }
     });
   } catch (error) {
