@@ -49,11 +49,19 @@ export const loginUser = async (req: Request, res: Response) => {
       throw new Error('Incorrect password');
     }
 
-    const { password: _, userId, ...dataUserLoggedIn } = user;
+    const {
+      password: _,
+      userId,
+      tourist,
+      travelAgency,
+      ...dataUserLoggedIn
+    } = user;
+
+    const additionalData = tourist ? tourist : travelAgency;
 
     res.status(200).json({
       message: 'User logged in successfully!',
-      data: dataUserLoggedIn
+      data: { ...dataUserLoggedIn, ...additionalData }
     });
   } catch (error) {
     console.error(error);

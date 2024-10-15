@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import type { User, UserEntry } from '../models/User';
+import type { User, UserEntry, UserWithRelations } from '../models/User';
 
 const prisma = new PrismaClient();
 
@@ -29,11 +29,17 @@ export const createUser = async (
   }
 };
 
-export const findUserByEmail = async (email: string): Promise<User> => {
+export const findUserByEmail = async (
+  email: string
+): Promise<UserWithRelations> => {
   try {
     const user = await prisma.user.findUnique({
       where: {
         email
+      },
+      include: {
+        tourist: true,
+        travelAgency: true
       }
     });
 
@@ -41,7 +47,7 @@ export const findUserByEmail = async (email: string): Promise<User> => {
       throw new Error('Error at finding the user by email');
     }
 
-    return user;
+    return user as UserWithRelations;
   } catch (error) {
     console.error(error);
     throw new Error('No user found with the given email');
