@@ -1,10 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import type { UserEntry } from '../models/User';
+import type { User, UserEntry } from '../models/User';
 
 const prisma = new PrismaClient();
 
-export const createUser = async (data: UserEntry) => {
+export const createUser = async (
+  data: UserEntry
+): Promise<Omit<User, 'password'>> => {
   try {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
