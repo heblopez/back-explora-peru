@@ -25,7 +25,7 @@ model User {
   username       String        @unique
   email          String        @unique @db.VarChar(255)
   password       String        @db.VarChar(255)
-  phoneNumber    String        @map("phone_number") @db.VarChar(20)
+  phoneNumber    String        @unique @map("phone_number") @db.VarChar(20)
   profilePicture String?       @map("profile_picture")
   userType       UserType      @default(CUSTOMER) @map("user_type")
   createdAt      DateTime      @default(now()) @map("created_at")
