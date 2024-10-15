@@ -1,9 +1,11 @@
 import express, { type Request, type Response } from 'express';
+import authRouter from './routes/auth.routes';
 
 const HOSTNAME = process.env.HOSTNAME || 'localhost';
 const PORT = Number(process.env.PORT) || 3000;
 
 const app = express();
+app.use(express.json());
 
 const welcomeListener = (_req: Request, res: Response) => {
   res
@@ -16,6 +18,7 @@ const welcomeListener = (_req: Request, res: Response) => {
 };
 
 app.get('/', welcomeListener);
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, () => {
   console.log(`✅ Explora Peru API is running on http://${HOSTNAME}:${PORT}`);
