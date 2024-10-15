@@ -28,3 +28,22 @@ export const createUser = async (
     throw new Error('Error while creating the user');
   }
 };
+
+export const findUserByEmail = async (email: string): Promise<User> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email
+      }
+    });
+
+    if (!user) {
+      throw new Error('Error at finding the user by email');
+    }
+
+    return user;
+  } catch (error) {
+    console.error(error);
+    throw new Error('No user found with the given email');
+  }
+};
