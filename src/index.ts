@@ -1,8 +1,6 @@
 import express, { type Request, type Response } from 'express';
+import { HOSTNAME, PORT } from './config';
 import authRouter from './routes/auth.routes';
-
-const HOSTNAME = process.env.HOSTNAME || 'localhost';
-const PORT = Number(process.env.PORT) || 3000;
 
 const app = express();
 app.use(express.json());
