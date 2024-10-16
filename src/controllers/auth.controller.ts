@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
 import type { TouristEntry } from '../models/Tourist';
 import type { UserEntry } from '../models/User';
+import { createAuthResponse } from '../services/auth.services';
 import { createTourist } from '../services/tourist.services';
 import { createUser, findUserByEmail } from '../services/user.services';
 import type { LoginEntry } from '../validators/login.schema';
@@ -49,19 +50,10 @@ export const loginUser = async (req: Request, res: Response) => {
       throw new Error('Incorrect password');
     }
 
-    const {
-      password: _,
-      userId,
-      tourist,
-      travelAgency,
-      ...dataUserLoggedIn
-    } = user;
-
-    const additionalData = tourist ? tourist : travelAgency;
-
+    const resAuth = createAuthResponse(user);
     res.status(200).json({
       message: 'User logged in successfully!',
-      data: { ...dataUserLoggedIn, ...additionalData }
+      ...resAuth
     });
   } catch (error) {
     console.error(error);
