@@ -12,8 +12,8 @@ export const newTouristSchema = z.object({
     .string({ invalid_type_error: 'The document number must be a string' })
     .min(8, 'The document number must be at least 8 digits long'),
   birthdate: z.string().date('The birthdate must have the format YYYY-MM-DD'),
-  country: z.string(),
-  gender: z.string(),
+  country: z.string().optional(),
+  gender: z.string().optional(),
   phoneNumber: z
     .string({ invalid_type_error: 'The phone number must be a string' })
     .min(1, 'The phone number is required')
