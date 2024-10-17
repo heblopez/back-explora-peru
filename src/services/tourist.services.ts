@@ -1,36 +1,40 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import type { Tourist, TouristEntry } from '../models/Tourist';
+import type { UserEntry, UserWithRelations } from '../models/User';
 
 const prisma = new PrismaClient();
 
 export const createTourist = async (
-  userId: number,
-  data: TouristEntry
-): Promise<Omit<Tourist, 'userId' | 'touristId'>> => {
+  userEntry: UserEntry,
+  TouristEntry: TouristEntry
+): Promise<Partial<UserWithRelations>> => {
   try {
-    const userFound = await prisma.user.findUnique({
-      where: {
-        userId
-      }
-    });
+    const { password, ...userEntryWithoutPassword } = userEntry;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!userFound) {
-      throw new Error('User not found');
-    }
+    let { birthdate, ...touristEntryWithoutBirthdate } = TouristEntry;
+    birthdate = new Date(birthdate).toISOString();
 
-    data.birthdate = new Date(data.birthdate).toISOString();
-
-    const tourist = await prisma.tourist.create({
+    const userWithTourist = await prisma.user.create({
       data: {
-        user: {
-          connect: userFound
-        },
-        ...data
+        username: crypto.randomUUID(),
+        ...userEntryWithoutPassword,
+        password: hashedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        tourist: {
+          create: { birthdate, ...touristEntryWithoutBirthdate }
+        }
+      },
+      include: {
+        tourist: true
       }
     });
 
-    const { userId: _, touristId, ...touristData } = tourist;
-    return touristData;
+    const { userId, password: _, tourist, ...dataUser } = userWithTourist;
+    const { touristId, userId: __, ...dataTourist } = tourist as Tourist;
+    return { ...dataUser, ...dataTourist };
   } catch (error) {
     console.error(error);
     throw new Error('Error when creating the tourist');

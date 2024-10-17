@@ -6,7 +6,7 @@ import type { UserEntry } from '../models/User';
 import { createTravelAgency } from '../services/agency.services';
 import { createAuthResponse } from '../services/auth.services';
 import { createTourist } from '../services/tourist.services';
-import { createUser, findUserByEmail } from '../services/user.services';
+import { findUserByEmail } from '../services/user.services';
 import type { LoginEntry } from '../validators/login.schema';
 
 export const registerTourist = async (req: Request, res: Response) => {
@@ -15,18 +15,14 @@ export const registerTourist = async (req: Request, res: Response) => {
 
     const { email, password, phoneNumber, ...dataTourist } = dataNewTourist;
 
-    const dataUser = {
-      email,
-      password,
-      phoneNumber
-    };
-
-    const { userId, ...dataUserWithoutId } = await createUser(dataUser);
-    const newTourist = await createTourist(userId, dataTourist);
+    const newTourist = await createTourist(
+      { email, password, phoneNumber },
+      dataTourist
+    );
 
     res.status(201).json({
       message: 'Tourist registered successfully!',
-      data: { ...dataUserWithoutId, ...newTourist }
+      data: newTourist
     });
   } catch (error) {
     console.error(error);

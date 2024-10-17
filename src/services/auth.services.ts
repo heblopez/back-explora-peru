@@ -24,22 +24,28 @@ export const createAuthResponse = (user: UserWithRelations) => {
     ...otherUserData
   } = user;
 
-  let additionalData = {} as
+  let dataAsTouristOrAgency = {} as
     | Omit<Tourist, 'userId' | 'touristId'>
     | Omit<TravelAgency, 'userId' | 'travelAgencyId'>;
 
   if (tourist) {
     const { userId, touristId, ...dataTourist } = tourist;
-    additionalData = dataTourist;
+    dataAsTouristOrAgency = dataTourist;
   }
 
   if (travelAgency) {
     const { userId, travelAgencyId, ...dataTravelAgency } = travelAgency;
-    additionalData = dataTravelAgency;
+    dataAsTouristOrAgency = dataTravelAgency;
   }
 
   return {
     token: signToken({ userId, username, email }),
-    data: { username, email, phoneNumber, ...additionalData, ...otherUserData }
+    data: {
+      username,
+      email,
+      phoneNumber,
+      ...dataAsTouristOrAgency,
+      ...otherUserData
+    }
   };
 };
