@@ -1,9 +1,11 @@
+import cors from 'cors';
 import express, { type Request, type Response } from 'express';
 
 const HOSTNAME = process.env.HOSTNAME || 'localhost';
 const PORT = Number(process.env.PORT) || 3000;
 
 const app = express();
+app.use(cors());
 
 const welcomeListener = (_req: Request, res: Response) => {
   res
