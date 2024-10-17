@@ -1,10 +1,10 @@
 import cors from 'cors';
 import express, { type Request, type Response } from 'express';
-
-const HOSTNAME = process.env.HOSTNAME || 'localhost';
-const PORT = Number(process.env.PORT) || 3000;
+import { HOSTNAME, PORT } from './config';
+import authRouter from './routes/auth.routes';
 
 const app = express();
+app.use(express.json());
 app.use(cors());
 
 const welcomeListener = (_req: Request, res: Response) => {
@@ -18,6 +18,7 @@ const welcomeListener = (_req: Request, res: Response) => {
 };
 
 app.get('/', welcomeListener);
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, () => {
   console.log(`✅ Explora Peru API is running on http://${HOSTNAME}:${PORT}`);
