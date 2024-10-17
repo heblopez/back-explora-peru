@@ -19,7 +19,6 @@ export const createTravelAgency = async (
         ...userEntryWithoutPassword,
         password: hashedPassword,
         createdAt: new Date(),
-        updatedAt: new Date(),
         travelAgency: {
           create: agencyEntry
         }

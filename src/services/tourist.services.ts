@@ -22,7 +22,6 @@ export const createTourist = async (
         ...userEntryWithoutPassword,
         password: hashedPassword,
         createdAt: new Date(),
-        updatedAt: new Date(),
         tourist: {
           create: { birthdate, ...touristEntryWithoutBirthdate }
         }

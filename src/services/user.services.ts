@@ -15,9 +15,7 @@ export const createUser = async (
         username: crypto.randomUUID(),
         email: data.email,
         password: hashedPassword,
-        phoneNumber: data.phoneNumber,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        phoneNumber: data.phoneNumber
       }
     });
 
