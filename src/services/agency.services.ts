@@ -22,13 +22,9 @@ export const createTravelAgency = async (
         username: crypto.randomUUID(),
         password: hashedPassword,
         phoneNumber,
-        travelAgency: {
-          create: additionalAgencyData
-        }
+        travelAgency: { create: additionalAgencyData }
       },
-      include: {
-        travelAgency: true
-      }
+      include: { travelAgency: true }
     });
 
     const { userId, password: _, travelAgency, ...dataUser } = userWithAgency;

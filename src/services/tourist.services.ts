@@ -32,9 +32,7 @@ export const createTourist = async (
           create: { birthdate: birthdateFmt, ...additionalTouristData }
         }
       },
-      include: {
-        tourist: true
-      }
+      include: { tourist: true }
     });
 
     const { userId, password: _, tourist, ...dataUser } = userWithTourist;
