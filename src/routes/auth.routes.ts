@@ -5,9 +5,9 @@ import {
   registerTravelAgency
 } from '../controllers/auth.controller';
 import { validateRequest } from '../middlewares/validateRequest';
-import { newTravelAgencySchema } from '../validators/agency.schema';
-import { loginSchema } from '../validators/login.schema';
-import { newTouristSchema } from '../validators/tourist.schema';
+import { newTravelAgencySchema } from '../schemas/agency.schema';
+import { loginSchema } from '../schemas/login.schema';
+import { newTouristSchema } from '../schemas/tourist.schema';
 
 const authRouter = Router();
 

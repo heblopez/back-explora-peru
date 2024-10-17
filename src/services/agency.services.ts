@@ -1,26 +1,29 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, type TravelAgency } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import type { TravelAgency, TravelAgencyEntry } from '../models/TravelAgency';
-import type { UserEntry, UserWithRelations } from '../models/User';
+import type {
+  ResRegisteredAgency,
+  TravelAgencyEntry
+} from '../schemas/agency.schema';
 
 const prisma = new PrismaClient();
 
 export const createTravelAgency = async (
-  userEntry: UserEntry,
   agencyEntry: TravelAgencyEntry
-): Promise<Partial<UserWithRelations>> => {
+): Promise<ResRegisteredAgency> => {
   try {
-    const { password, ...userEntryWithoutPassword } = userEntry;
+    const { password, email, phoneNumber, ...additionalAgencyData } =
+      agencyEntry;
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const userWithAgency = await prisma.user.create({
       data: {
+        email,
         username: crypto.randomUUID(),
-        ...userEntryWithoutPassword,
         password: hashedPassword,
-        createdAt: new Date(),
+        phoneNumber,
         travelAgency: {
-          create: agencyEntry
+          create: additionalAgencyData
         }
       },
       include: {
