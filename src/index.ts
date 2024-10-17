@@ -1,9 +1,11 @@
+import cors from 'cors';
 import express, { type Request, type Response } from 'express';
 import { HOSTNAME, PORT } from './config';
 import authRouter from './routes/auth.routes';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const welcomeListener = (_req: Request, res: Response) => {
   res
