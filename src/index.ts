@@ -1,11 +1,17 @@
 import cors from 'cors';
 import express, { type Request, type Response } from 'express';
+import morgan from 'morgan';
 import { HOSTNAME, PORT } from './config';
 import authRouter from './routes/auth.routes';
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+morgan.token('body', (req: Request) => JSON.stringify(req.body));
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+);
 
 const welcomeListener = (_req: Request, res: Response) => {
   res
