@@ -29,7 +29,7 @@ model User {
   profilePicture String?       @map("profile_picture")
   userType       UserType      @default(CUSTOMER) @map("user_type")
   createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @map("updated_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
   lastLogin      DateTime?     @map("last_login")
   travelAgency   TravelAgency?
   tourist        Tourist?
@@ -73,4 +73,33 @@ model Tourist {
   user           User         @relation(fields: [userId], references: [userId])
 
   @@map("tourists")
+}
+
+model Tour {
+  tourId          Int      @id @default(autoincrement()) @map("tour_id")
+  agencyId        Int      @map("agency_id")
+  tourName        String   @map("tour_name") @db.VarChar(150)
+  tourDescription String   @map("tour_description")
+  regions         String[]
+  price           Decimal  @db.Decimal(5, 2)
+  duration        String   @db.VarChar(12)
+  days            String[]
+  maxGroupSize    Int?     @map("max_group_size") @db.SmallInt
+  photosUrl       String[] @map("photos_url")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("tours")
+}
+
+model Place {
+  placeId     Int      @id @default(autoincrement()) @map("place_id")
+  name        String   @db.VarChar(100)
+  description String?
+  photoUrl    String?  @map("photo_url")
+  coordinates Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("places")
 }
