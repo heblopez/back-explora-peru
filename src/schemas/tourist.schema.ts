@@ -1,3 +1,4 @@
+import type { Tourist, User } from '@prisma/client';
 import { z } from 'zod';
 
 export const newTouristSchema = z.object({
@@ -28,3 +29,10 @@ export const newTouristSchema = z.object({
     .min(7, 'The password must be at least 7 characters long')
     .max(24, 'The password must have maximum 24 characters')
 });
+
+export type TouristEntry = z.infer<typeof newTouristSchema>;
+
+export type ResRegisteredTourist = Omit<
+  User & Tourist,
+  'userId' | 'touristId' | 'password'
+>;

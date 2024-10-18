@@ -1,15 +1,25 @@
+import type { Tourist, TravelAgency } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { SECRET_JWT_KEY } from '../config';
-import type { Tourist } from '../models/Tourist';
-import type { TravelAgency } from '../models/TravelAgency';
-import type { UserWithRelations } from '../models/User';
+import type { UserWithRelations } from '../schemas/login.schema';
 
-export const signToken = (payload: Record<string, unknown>) => {
+export interface AuthPayload {
+  touristId?: number;
+  travelAgencyId?: number;
+  username?: string;
+  email?: string;
+}
+
+export const signToken = (payload: AuthPayload): string => {
   return jwt.sign(payload, SECRET_JWT_KEY, { expiresIn: '2h' });
 };
 
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, SECRET_JWT_KEY);
+export const verifyToken = (token: string): AuthPayload => {
+  const result = jwt.verify(token, SECRET_JWT_KEY);
+  if (result && typeof result === 'string') {
+    throw new Error('Invalid token');
+  }
+  return result as AuthPayload;
 };
 
 export const createAuthResponse = (user: UserWithRelations) => {
@@ -28,18 +38,22 @@ export const createAuthResponse = (user: UserWithRelations) => {
     | Omit<Tourist, 'userId' | 'touristId'>
     | Omit<TravelAgency, 'userId' | 'travelAgencyId'>;
 
+  let token = '';
+
   if (tourist) {
     const { userId, touristId, ...dataTourist } = tourist;
     dataAsTouristOrAgency = dataTourist;
+    token = signToken({ touristId, username, email });
   }
 
   if (travelAgency) {
     const { userId, travelAgencyId, ...dataTravelAgency } = travelAgency;
     dataAsTouristOrAgency = dataTravelAgency;
+    token = signToken({ travelAgencyId, username, email });
   }
 
   return {
-    token: signToken({ userId, username, email }),
+    token,
     data: {
       username,
       email,

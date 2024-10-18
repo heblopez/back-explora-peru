@@ -1,24 +1,18 @@
 import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
-import type { TouristEntry } from '../models/Tourist';
-import type { TravelAgencyEntry } from '../models/TravelAgency';
-import type { UserEntry } from '../models/User';
+import type { TravelAgencyEntry } from '../schemas/agency.schema';
+import type { LoginEntry } from '../schemas/login.schema';
+import type { TouristEntry } from '../schemas/tourist.schema';
 import { createTravelAgency } from '../services/agency.services';
 import { createAuthResponse } from '../services/auth.services';
 import { createTourist } from '../services/tourist.services';
 import { findUserByEmail } from '../services/user.services';
-import type { LoginEntry } from '../validators/login.schema';
 
 export const registerTourist = async (req: Request, res: Response) => {
   try {
-    const dataNewTourist = req.body as TouristEntry & UserEntry;
+    const dataNewTourist = req.body as TouristEntry;
 
-    const { email, password, phoneNumber, ...dataTourist } = dataNewTourist;
-
-    const newTourist = await createTourist(
-      { email, password, phoneNumber },
-      dataTourist
-    );
+    const newTourist = await createTourist(dataNewTourist);
 
     res.status(201).json({
       message: 'Tourist registered successfully!',
@@ -65,14 +59,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const registerTravelAgency = async (req: Request, res: Response) => {
   try {
-    const dataNewTravelAgency = req.body as TravelAgencyEntry & UserEntry;
-    const { email, password, phoneNumber, ...dataTravelAgency } =
-      dataNewTravelAgency;
+    const dataNewTravelAgency = req.body as TravelAgencyEntry;
 
-    const newTravelAgency = await createTravelAgency(
-      { email, password, phoneNumber },
-      dataTravelAgency
-    );
+    const newTravelAgency = await createTravelAgency(dataNewTravelAgency);
 
     res.status(201).json({
       message: 'Travel Agency registered successfully!',
