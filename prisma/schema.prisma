@@ -48,6 +48,7 @@ model TravelAgency {
   website           String? @db.VarChar(255)
   verified          Boolean @default(false)
   user              User    @relation(fields: [userId], references: [userId])
+  tours             Tour[]
 
   @@map("travel_agencies")
 }
@@ -76,18 +77,20 @@ model Tourist {
 }
 
 model Tour {
-  tourId          Int      @id @default(autoincrement()) @map("tour_id")
-  agencyId        Int      @map("agency_id")
-  tourName        String   @map("tour_name") @db.VarChar(150)
-  tourDescription String   @map("tour_description")
+  tourId          Int          @id @default(autoincrement()) @map("tour_id")
+  agencyId        Int          @map("agency_id")
+  agency          TravelAgency @relation(fields: [agencyId], references: [travelAgencyId])
+  tourName        String       @map("tour_name") @db.VarChar(150)
+  tourDescription String       @map("tour_description")
   regions         String[]
-  price           Decimal  @db.Decimal(5, 2)
-  duration        String   @db.VarChar(12)
+  price           Decimal      @db.Decimal(5, 2)
+  duration        String       @db.VarChar(12)
   days            String[]
-  maxGroupSize    Int?     @map("max_group_size") @db.SmallInt
-  photosUrl       String[] @map("photos_url")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  maxGroupSize    Int?         @map("max_group_size") @db.SmallInt
+  photosUrl       String[]     @map("photos_url")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  places          Place[]
 
   @@map("tours")
 }
@@ -100,6 +103,8 @@ model Place {
   coordinates Json?
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+  tour        Tour     @relation(fields: [tourId], references: [tourId])
+  tourId      Int      @map("tour_id")
 
   @@map("places")
 }
