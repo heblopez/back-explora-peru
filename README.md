@@ -12,7 +12,9 @@ This is the backend for EploraPeru project, developed using **Node.js**, **Expre
 - [API Routes](#-api-routes)
 - [Contributions](#-contributions)
 - [License](#-license)
-
+- [Authors](#-authors)
+- [Acknowledgments](#-acknowledgments)
+  
 ## 🚀 Features
 
 - CRUD operations for contacts: create, read, update, and delete persons.
