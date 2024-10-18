@@ -5,6 +5,7 @@ import {
   type AuthRequest
 } from '../middlewares/verifyAuthRequest';
 import {
+  type CreateTourReq,
   createTour,
   deleteTour,
   getTourbyId,
@@ -32,7 +33,7 @@ export const registerTour = async (req: AuthRequest, res: Response) => {
   try {
     const { travelAgencyId } = AuthReqHasValues(req, 'travelAgencyId');
 
-    const dataNewTour = req.body as Tour;
+    const dataNewTour = req.body as CreateTourReq;
     dataNewTour.agencyId = travelAgencyId as number;
     const newTour = await createTour(dataNewTour);
 

@@ -1,4 +1,4 @@
-import { PrismaClient, type Tour } from '@prisma/client';
+import { type Prisma, PrismaClient, type Tour } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -12,9 +12,25 @@ export const getTours = async (): Promise<Tour[]> => {
   }
 };
 
-export const createTour = async (data: Tour): Promise<Tour> => {
+export interface CreateTourReq extends Tour {
+  places?: Prisma.PlaceCreateInput[];
+}
+
+export const createTour = async (data: CreateTourReq): Promise<Tour> => {
   try {
-    return await prisma.tour.create({ data });
+    const { places, ...tourWithoutPlaces } = data;
+
+    return await prisma.tour.create({
+      data: {
+        ...tourWithoutPlaces,
+        places: {
+          create: places
+        }
+      },
+      include: {
+        places: true
+      }
+    });
   } catch (error) {
     console.error(error);
     throw new Error('Error when creating the tour');
