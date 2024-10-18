@@ -1,6 +1,10 @@
 import type { Tour } from '@prisma/client';
 import type { Request, Response } from 'express';
 import {
+  AuthReqHasValues,
+  type AuthRequest
+} from '../middlewares/verifyAuthRequest';
+import {
   createTour,
   deleteTour,
   getTourbyId,
@@ -24,10 +28,12 @@ export const showTours = async (_req: Request, res: Response) => {
   }
 };
 
-export const registerTour = async (req: Request, res: Response) => {
+export const registerTour = async (req: AuthRequest, res: Response) => {
   try {
-    const dataNewTour = req.body as Tour;
+    const { travelAgencyId } = AuthReqHasValues(req, 'travelAgencyId');
 
+    const dataNewTour = req.body as Tour;
+    dataNewTour.agencyId = travelAgencyId as number;
     const newTour = await createTour(dataNewTour);
 
     res.status(201).json({
@@ -60,8 +66,9 @@ export const showTourDetails = async (req: Request, res: Response) => {
   }
 };
 
-export const updateATour = async (req: Request, res: Response) => {
+export const updateATour = async (req: AuthRequest, res: Response) => {
   try {
+    const { travelAgencyId } = AuthReqHasValues(req, 'travelAgencyId');
     const { tourId } = req.params;
     const dataToUpdate = req.body as Tour;
 
@@ -74,8 +81,13 @@ export const updateATour = async (req: Request, res: Response) => {
     }
 
     const currentTour = await getTourbyId(Number(tourId));
-    const { createdAt, updatedAt, tourId: _, ...currentData } = currentTour;
+    if (currentTour.agencyId !== travelAgencyId) {
+      res.status(403).json({
+        errors: [{ message: 'You are not authorized to update this tour' }]
+      });
+    }
 
+    const { createdAt, updatedAt, tourId: _, ...currentData } = currentTour;
     const dataToSend = { ...currentData, ...dataToUpdate };
     const updatedTour = await updateTour(Number(tourId), dataToSend);
 
@@ -91,9 +103,17 @@ export const updateATour = async (req: Request, res: Response) => {
   }
 };
 
-export const removeTour = async (req: Request, res: Response) => {
+export const removeTour = async (req: AuthRequest, res: Response) => {
   try {
+    const { travelAgencyId } = AuthReqHasValues(req, 'travelAgencyId');
     const { tourId } = req.params;
+
+    const currentTour = await getTourbyId(Number(tourId));
+    if (currentTour.agencyId !== travelAgencyId) {
+      res.status(403).json({
+        errors: [{ message: 'You are not authorized to delete this tour' }]
+      });
+    }
 
     const deletedTour = await deleteTour(Number(tourId));
 

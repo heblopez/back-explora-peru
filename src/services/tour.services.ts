@@ -30,7 +30,7 @@ export const getTourbyId = async (tourId: number): Promise<Tour> => {
     });
 
     if (!tour) {
-      throw new Error('Error: Tour not found');
+      throw new Error('Tour not found');
     }
 
     return tour;
