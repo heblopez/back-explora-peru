@@ -83,14 +83,17 @@ npm start    # The server will be available at http://localhost:3000 by default.
 
 ## 🚦 API Routes
 
-| Method | Route              | Description                        |
-| ------ | ------------------ | ---------------------------------- |
-| GET    | `/api/persons`     | Retrieves all persons              |
-| GET    | `/api/persons/:id` | Retrieves a person by its ID       |
-| POST   | `/api/persons`     | Creates a new person               |
-| PUT    | `/api/persons/:id` | Updates a person by its ID         |
-| DELETE | `/api/persons/:id` | Deletes a person by its ID         |
-| GET    | `/info`            | Retrieves info about the phonebook |
+| Method | Route                                         | Description                              |
+| ------ | --------------------------------------------- | ---------------------------------------- |
+| GET    | `/users`                                      | Retrieves a list of all users            |
+| POST   | `/users`                                      | Registers a new user                     |
+| PATCH  | `/users/{id}`                                 | Updates an existing user's information   |
+| DELETE | `/users/{id}`                                 | Deletes a user                           |
+| GET    | `/comments`                                   | Retrieves all comments                   |
+| GET    | `/tours`                                      | Retrieves a list of available tours      |
+| POST   | `/tours`                                      | Creates a new tour                       |
+| PUT    | `/tours/{id}`                                 | Updates an existing tour                 |
+| DELETE | `/tours/{id}`                                 | Deletes a tour                           |
 
 ## 🛠️ Technologies Used
 
