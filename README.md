@@ -2,6 +2,17 @@
 
 This is the backend for EploraPeru project, developed using **Node.js**, **Express**, and **TypeScript**. It provides an API to manage a list of tours, allowing you to create, read, update, and delete(CRUD) tours.
 
+## 📑 Table of Contents
+
+- [Features](#-features)
+- [Requirements](#-requirements)
+- [Project Structure](#-project-structure)
+- [Installation](#️-installation)
+- [Available Scripts](#-available-scripts)
+- [API Routes](#-api-routes)
+- [Contributions](#-contributions)
+- [License](#-license)
+
 ## 🚀 Features
 
 - CRUD operations for contacts: create, read, update, and delete persons.
