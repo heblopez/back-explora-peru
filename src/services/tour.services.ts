@@ -37,11 +37,17 @@ export const createTour = async (data: CreateTourReq): Promise<Tour> => {
   }
 };
 
-export const getTourbyId = async (tourId: number): Promise<Tour> => {
+export const getTourbyId = async (
+  tourId: number,
+  withPlaces = true
+): Promise<Tour> => {
   try {
     const tour = await prisma.tour.findUnique({
       where: {
         tourId
+      },
+      include: {
+        places: withPlaces
       }
     });
 
