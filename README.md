@@ -104,3 +104,17 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 ## ✉️ Contact
 
 If you have any questions or suggestions, feel free to contact me at [heberth.lopez.19@gmail.com](mailto:heberth.lopez.19@gmail.com).
+
+## ✉️ Authors
+
+Full stack Developers:
+
+- Jaqueline Rocio - [@JaquelineRocio](https://github.com/JaquelineRocio)
+- Heberth López - [@heblopez](https://github.com/heblopez)
+- Victor Ramirez - [@Victormrl17](https://github.com/Victormrl17)
+- Juan Alva - [@jlac8](https://github.com/jlac8)
+
+## Acknowledgments
+
+A special thanks to Make it Real, especially [@khriztianmoreno](https://github.com/khriztianmoreno) for the valuable feedback during daily meetings and demos, and to [@nayruthCalla](https://github.com/nayruthCalla) for the support and review.
+
