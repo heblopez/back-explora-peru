@@ -1,3 +1,4 @@
+import type { Tourist, TravelAgency, User } from '@prisma/client';
 import { z } from 'zod';
 
 export const loginSchema = z.object({
@@ -13,3 +14,8 @@ export const loginSchema = z.object({
 });
 
 export type LoginEntry = z.infer<typeof loginSchema>;
+
+export type UserWithRelations = User & {
+  tourist?: Tourist;
+  travelAgency?: TravelAgency;
+};

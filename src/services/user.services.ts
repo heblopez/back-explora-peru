@@ -1,12 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, type User } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import type { User, UserEntry, UserWithRelations } from '../models/User';
+import type { UserWithRelations } from '../schemas/login.schema';
 
 const prisma = new PrismaClient();
 
-export const createUser = async (
-  data: UserEntry
-): Promise<Omit<User, 'password'>> => {
+/* NOTE: Currently, this function is not used because the user is created with the register-tourist and register-agency routes */
+export const createUser = async (data: {
+  email: string;
+  password: string;
+  phoneNumber: string;
+}): Promise<Omit<User, 'password'>> => {
   try {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
@@ -26,6 +29,7 @@ export const createUser = async (
     throw new Error('Error while creating the user');
   }
 };
+/* End of the note */
 
 export const findUserByEmail = async (
   email: string

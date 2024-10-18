@@ -1,8 +1,7 @@
+import type { Tourist, TravelAgency } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { SECRET_JWT_KEY } from '../config';
-import type { Tourist } from '../models/Tourist';
-import type { TravelAgency } from '../models/TravelAgency';
-import type { UserWithRelations } from '../models/User';
+import type { UserWithRelations } from '../schemas/login.schema';
 
 export const signToken = (payload: Record<string, unknown>) => {
   return jwt.sign(payload, SECRET_JWT_KEY, { expiresIn: '2h' });
