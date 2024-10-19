@@ -166,14 +166,6 @@ Contributions are welcome! If you'd like to contribute, please follow these step
 4. Push the changes to your branch (`git push origin feature/new-feature`).
 5. Open a pull request.
 
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
-
-## ✉️ Contact
-
-If you have any questions or suggestions, feel free to contact me at [heberth.lopez.19@gmail.com](mailto:heberth.lopez.19@gmail.com).
-
 ## 👩‍💻 Authors
 
 Full stack Developers:
