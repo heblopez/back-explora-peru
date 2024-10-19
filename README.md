@@ -11,7 +11,6 @@ The backend of the ExploraPerú project, designed to promote tourism in Peru, wa
 - [Available Scripts](#-available-scripts)
 - [API Routes](#-api-routes)
 - [Contributions](#-contributions)
-- [License](#-license)
 - [Authors](#-authors)
 - [Acknowledgment](#-acknowledgment)
 
