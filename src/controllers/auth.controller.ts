@@ -51,7 +51,7 @@ export const loginUser = async (req: Request, res: Response) => {
     console.error(error);
     if (error instanceof Error) {
       res.status(400).json({
-        errors: [{ message: `Error at logging: ${error.message}` }]
+        errors: [{ message: `Error at logging. ${error.message}` }]
       });
     }
   }

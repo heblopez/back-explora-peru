@@ -22,6 +22,7 @@ export const createTravelAgency = async (
         username: crypto.randomUUID(),
         password: hashedPassword,
         phoneNumber,
+        role: 'agency',
         travelAgency: { create: additionalAgencyData }
       },
       include: { travelAgency: true }
