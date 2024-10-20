@@ -14,10 +14,17 @@ datasource db {
 }
 
 enum UserType {
-  ADMIN
-  CUSTOMER
+  admin
+  customer
 
   @@map("user_type")
+}
+
+enum Role {
+  tourist
+  agency
+
+  @@map("role")
 }
 
 model User {
@@ -27,7 +34,8 @@ model User {
   password       String        @db.VarChar(255)
   phoneNumber    String        @unique @map("phone_number") @db.VarChar(20)
   profilePicture String?       @map("profile_picture")
-  userType       UserType      @default(CUSTOMER) @map("user_type")
+  userType       UserType      @default(customer) @map("user_type")
+  role           Role          @default(tourist)
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
   lastLogin      DateTime?     @map("last_login")
