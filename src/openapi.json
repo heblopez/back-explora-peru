@@ -1,0 +1,532 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Explora Peru API",
+    "description": "REST API for the “Explora Peru” project, which aims to connect tourism agencies and tourists looking for tours within the country, and thus help promote Peru's tourism activity.\n\nSome useful links:\n- [Backend repository](https://github.com/heblopez/back-explora-peru)\n- [Frontend repository](https://github.com/heblopez/front-explora-peru)",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "heberth.lopez.19@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "https://backend-explora-peru.up.railway.app/api/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User registration and login"
+    },
+    {
+      "name": "Tourist",
+      "description": "Operations related to tourists"
+    },
+    {
+      "name": "Agency",
+      "description": "Operations related to travel agencies"
+    }
+  ],
+  "paths": {
+    "/auth/register-tourist": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create user as tourist",
+        "operationId": "createTourist",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterTouristDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TouristData"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register-agency": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create user as tourist",
+        "operationId": "createAgency",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterAgencyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AgencyData"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation: Info about the user as a Tourist or as an Agency",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    { "$ref": "#/components/schemas/TouristLoginResponse" },
+                    { "$ref": "#/components/schemas/AgencyLoginResponse" }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    },
+    "/tours": {
+      "get": {
+        "tags": ["Tourist"],
+        "summary": "Show all tours",
+        "operationId": "showTours",
+        "responses": {
+          "200": {
+            "description": "Successful operation: List of published tours",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToursResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserLoginDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": false
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "nullable": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "TouristLoginResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "token": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TouristData"
+          }
+        }
+      },
+      "AgencyLoginResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "token": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AgencyData"
+          }
+        }
+      },
+      "TouristData": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "documentType": {
+            "type": "string",
+            "example": "DNI"
+          },
+          "documentNumber": {
+            "type": "string",
+            "example": "78787889"
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "country": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "profilePicture": {
+            "type": "string",
+            "format": "url"
+          },
+          "userType": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastLogin": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AgencyData": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone"
+          },
+          "agencyName": {
+            "type": "string",
+            "example": "My Travel Agency"
+          },
+          "agencyDescription": {
+            "type": "string",
+            "example": "My Travel Agency has the best tours in Peru"
+          },
+          "ruc": {
+            "type": "string",
+            "example": "20787897889"
+          },
+          "address": {
+            "type": "string",
+            "example": "Calle de la República 777"
+          },
+          "logoUrl": {
+            "type": "string",
+            "format": "url"
+          },
+          "website": {
+            "type": "string",
+            "format": "url"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "userType": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastLogin": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Tour": {
+        "type": "object",
+        "properties": {
+          "tourId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "agencyId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "tourName": {
+            "type": "string",
+            "example": "Amazing Tour"
+          },
+          "tourDescription": {
+            "type": "string",
+            "example": "Amazing tour description"
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Lima"
+            }
+          },
+          "price": {
+            "type": "string",
+            "example": "299.99"
+          },
+          "duration": {
+            "type": "string",
+            "example": "1d 3h 34m"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Friday, Saturday, Sunday"
+            }
+          },
+          "maxGroupSize": {
+            "type": "integer",
+            "format": "int64",
+            "example": 29
+          },
+          "photosUrl": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "url",
+              "example": "https://www.example.com/tour-photo.jpg"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ToursResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tour"
+            }
+          }
+        }
+      },
+      "RegisterTouristDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": false
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "nullable": false
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "nullable": false
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John",
+            "nullable": false
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe",
+            "nullable": false
+          },
+          "documentType": {
+            "type": "string",
+            "example": "DNI",
+            "enum": ["DNI", "PASSPORT", "CE"],
+            "nullable": false
+          },
+          "documentNumber": {
+            "type": "string",
+            "example": "78787889",
+            "nullable": false
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date",
+            "nullable": false
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["male", "female"],
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "RegisterAgencyDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": false
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "nullable": false
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "nullable": false
+          },
+          "agencyName": {
+            "type": "string",
+            "example": "My Travel Agency",
+            "nullable": false
+          },
+          "agencyDescription": {
+            "type": "string",
+            "example": "My Travel Agency has the best tours in Peru",
+            "nullable": true
+          },
+          "ruc": {
+            "type": "string",
+            "example": "20787897889",
+            "nullable": false
+          },
+          "address": {
+            "type": "string",
+            "example": "Republic Street 777",
+            "nullable": false
+          },
+          "logoUrl": {
+            "type": "string",
+            "format": "url",
+            "nullable": true
+          },
+          "website": {
+            "type": "string",
+            "format": "url",
+            "nullable": true
+          }
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+    "Bearer": {
+      "type": "http",
+      "description": "Please enter a valid token for accessing this API. Example: \"Authorization: Bearer {token}\"",
+      "scheme": "Bearer",
+      "bearerFormat": "JWT"
+    }
+  }
+}
