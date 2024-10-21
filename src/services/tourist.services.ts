@@ -35,9 +35,17 @@ export const createTourist = async (
       include: { tourist: true }
     });
 
-    const { userId, password: _, tourist, ...dataUser } = userWithTourist;
-    const { touristId, userId: __, ...dataTourist } = tourist as Tourist;
-    return { ...dataUser, ...dataTourist };
+    const {
+      userId,
+      username,
+      email: _email,
+      password: _,
+      phoneNumber: _phone,
+      tourist,
+      ...otherUserData
+    } = userWithTourist;
+    const { touristId, userId: id, ...dataTourist } = tourist as Tourist;
+    return { username, email, phoneNumber, ...dataTourist, ...otherUserData };
   } catch (error) {
     console.error(error);
     throw new Error('Error when creating the tourist');
