@@ -167,6 +167,30 @@
           }
         }
       }
+    },
+    "/tours/admin": {
+      "get": {
+        "tags": ["Agency"],
+        "summary": "Show my created tours",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "operationId": "showMyTours",
+        "responses": {
+          "200": {
+            "description": "Successful operation: List of your published tours",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyToursResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -518,15 +542,133 @@
             "nullable": true
           }
         }
+      },
+      "Place": {
+        "type": "object",
+        "properties": {
+          "placeId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Lima main square"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of the place"
+          },
+          "region": {
+            "type": "string",
+            "example": "Lima"
+          },
+          "photoUrl": {
+            "type": "string",
+            "format": "url",
+            "example": "Lima"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["-7.0376183", "-77.9238829867436"]
+          }
+        }
+      },
+      "MyTour": {
+        "type": "object",
+        "properties": {
+          "tourId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "agencyId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "tourName": {
+            "type": "string",
+            "example": "Amazing Tour"
+          },
+          "tourDescription": {
+            "type": "string",
+            "example": "Amazing tour description"
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Lima"
+            }
+          },
+          "price": {
+            "type": "string",
+            "example": "299.99"
+          },
+          "duration": {
+            "type": "string",
+            "example": "1d 3h 34m"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Friday, Saturday, Sunday"
+            }
+          },
+          "maxGroupSize": {
+            "type": "integer",
+            "format": "int64",
+            "example": 29
+          },
+          "photosUrl": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "url",
+              "example": "https://www.example.com/tour-photo.jpg"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "places": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Place"
+            }
+          }
+        }
+      },
+      "MyToursResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyTour"
+            }
+          }
+        }
       }
-    }
-  },
-  "securitySchemes": {
-    "Bearer": {
-      "type": "http",
-      "description": "Please enter a valid token for accessing this API. Example: \"Authorization: Bearer {token}\"",
-      "scheme": "Bearer",
-      "bearerFormat": "JWT"
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "description": "Please enter a valid token for accessing this API. Example: \"Authorization: Bearer {token}\"",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
 }
