@@ -28,13 +28,21 @@ export const createTravelAgency = async (
       include: { travelAgency: true }
     });
 
-    const { userId, password: _, travelAgency, ...dataUser } = userWithAgency;
+    const {
+      userId,
+      username,
+      email: _email,
+      password: _pw,
+      phoneNumber: _phone,
+      travelAgency,
+      ...otherUserData
+    } = userWithAgency;
     const {
       travelAgencyId,
-      userId: __,
+      userId: _,
       ...dataAgency
     } = travelAgency as TravelAgency;
-    return { ...dataUser, ...dataAgency };
+    return { username, email, phoneNumber, ...dataAgency, ...otherUserData };
   } catch (error) {
     console.error(error);
     throw new Error('Error when creating the travel agency');

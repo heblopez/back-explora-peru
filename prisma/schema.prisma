@@ -28,19 +28,18 @@ enum Role {
 }
 
 model User {
-  userId         Int           @id @default(autoincrement()) @map("user_id")
-  username       String        @unique
-  email          String        @unique @db.VarChar(255)
-  password       String        @db.VarChar(255)
-  phoneNumber    String        @unique @map("phone_number") @db.VarChar(20)
-  profilePicture String?       @map("profile_picture")
-  userType       UserType      @default(customer) @map("user_type")
-  role           Role          @default(tourist)
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
-  lastLogin      DateTime?     @map("last_login")
-  travelAgency   TravelAgency?
-  tourist        Tourist?
+  userId       Int           @id @default(autoincrement()) @map("user_id")
+  username     String        @unique
+  email        String        @unique @db.VarChar(255)
+  password     String        @db.VarChar(255)
+  phoneNumber  String        @unique @map("phone_number") @db.VarChar(20)
+  userType     UserType      @default(customer) @map("user_type")
+  role         Role          @default(tourist)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  lastLogin    DateTime?     @map("last_login")
+  travelAgency TravelAgency?
+  tourist      Tourist?
 
   @@map("users")
 }
@@ -79,9 +78,23 @@ model Tourist {
   birthdate      DateTime     @db.Date
   country        String?      @db.VarChar(100)
   gender         String?      @db.VarChar(10)
+  profilePicture String?      @map("profile_picture")
   user           User         @relation(fields: [userId], references: [userId])
+  bookings       Booking[]
 
   @@map("tourists")
+}
+
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+
+  @@map("day_of_week")
 }
 
 model Tour {
@@ -93,12 +106,14 @@ model Tour {
   regions         String[]
   price           Decimal      @db.Decimal(5, 2)
   duration        String       @db.VarChar(12)
-  days            String[]
+  days            DayOfWeek[]
   maxGroupSize    Int?         @map("max_group_size") @db.SmallInt
   photosUrl       String[]     @map("photos_url")
   createdAt       DateTime     @default(now()) @map("created_at")
   updatedAt       DateTime     @updatedAt @map("updated_at")
   places          Place[]
+  schedules       Schedule[]
+  sessions        Session[]
 
   @@map("tours")
 }
@@ -107,6 +122,7 @@ model Place {
   placeId     Int      @id @default(autoincrement()) @map("place_id")
   name        String   @db.VarChar(100)
   description String?
+  region      String?
   photoUrl    String?  @map("photo_url")
   coordinates String[]
   createdAt   DateTime @default(now()) @map("created_at")
@@ -115,4 +131,54 @@ model Place {
   tourId      Int      @map("tour_id")
 
   @@map("places")
+}
+
+model Schedule {
+  scheduleId Int        @id @default(autoincrement()) @map("schedule_id")
+  tourId     Int        @map("tour_id")
+  startDay   DayOfWeek  @map("start_day")
+  startTime  String     @map("start_time")
+  endDay     DayOfWeek? @map("end_day")
+  endTime    String?    @map("end_time")
+  tour       Tour       @relation(fields: [tourId], references: [tourId])
+
+  @@map("schedules")
+}
+
+model Session {
+  sessionId         Int       @id @default(autoincrement()) @map("session_id")
+  tourId            Int       @map("tour_id")
+  sessionDate       DateTime  @map("session_date")
+  reservedAttendees Int       @default(0) @map("reserved_attendees")
+  tour              Tour      @relation(fields: [tourId], references: [tourId])
+  bookings          Booking[]
+
+  @@map("sessions")
+}
+
+model Booking {
+  bookingId           Int        @id @default(autoincrement()) @map("booking_id")
+  sessionId           Int        @map("session_id")
+  touristId           Int        @map("tourist_id")
+  numberOfAttendees   Int        @default(1) @map("number_of_attendees")
+  additionalAttendees Attendee[]
+  totalPrice          Decimal    @map("total_price") @db.Decimal(7, 2)
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
+  session             Session    @relation(fields: [sessionId], references: [sessionId])
+  tourist             Tourist    @relation(fields: [touristId], references: [touristId])
+
+  @@map("bookings")
+}
+
+model Attendee {
+  attendeeId     Int          @id @default(autoincrement()) @map("attendee_id")
+  bookingId      Int          @map("booking_id")
+  firstName      String       @map("first_name")
+  lastName       String       @map("last_name")
+  documentType   DocumentType @map("document_type")
+  documentNumber String       @map("document_number")
+  booking        Booking      @relation(fields: [bookingId], references: [bookingId])
+
+  @@map("attendees")
 }

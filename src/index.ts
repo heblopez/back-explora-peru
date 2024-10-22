@@ -1,7 +1,9 @@
 import cors from 'cors';
 import express, { type Request, type Response } from 'express';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
 import { HOSTNAME, PORT } from './config';
+import swaggerJson from './openapi.json';
 import authRouter from './routes/auth.routes';
 import tourRouter from './routes/tour.routes';
 
@@ -27,6 +29,8 @@ const welcomeListener = (_req: Request, res: Response) => {
 app.get('/', welcomeListener);
 app.use('/api/auth', authRouter);
 app.use('/api', tourRouter);
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
 app.listen(PORT, () => {
   console.log(`✅ Explora Peru API is running on http://${HOSTNAME}:${PORT}`);

@@ -1,4 +1,4 @@
-import { PrismaClient, type User } from '@prisma/client';
+import { type Prisma, PrismaClient, type User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import type { UserWithRelations } from '../schemas/login.schema';
 
@@ -53,5 +53,30 @@ export const findUserByEmail = async (
   } catch (error) {
     console.error(error);
     throw new Error('No user found with the given email');
+  }
+};
+
+export const updateUser = async (
+  userId: number,
+  data: Prisma.UserUpdateInput
+) => {
+  try {
+    const user = await prisma.user.update({
+      data,
+      where: { userId },
+      include: {
+        tourist: true,
+        travelAgency: true
+      }
+    });
+
+    if (!user) {
+      throw new Error('User to update not found');
+    }
+
+    return user as UserWithRelations;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error at updating the user');
   }
 };
