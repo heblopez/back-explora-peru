@@ -12,6 +12,42 @@ export const getTours = async (): Promise<Tour[]> => {
   }
 };
 
+export interface TourFilter {
+  agencyId?: number;
+  tourName?: string;
+  priceMin?: number;
+  priceMax?: number;
+}
+
+export const getFilteredTours = async (
+  filter: TourFilter,
+  withPlaces = false,
+  withSchedules = false
+): Promise<Tour[]> => {
+  try {
+    const tours = await prisma.tour.findMany({
+      where: {
+        OR: [
+          { agencyId: filter.agencyId },
+          { tourName: { contains: filter.tourName } }
+        ],
+        AND: [
+          { price: { gte: filter.priceMin } },
+          { price: { lte: filter.priceMax } }
+        ]
+      },
+      include: {
+        places: withPlaces,
+        schedules: withSchedules
+      }
+    });
+    return tours;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error when getting the tours');
+  }
+};
+
 export interface CreateTourReq extends Tour {
   places?: Prisma.PlaceCreateInput[];
 }

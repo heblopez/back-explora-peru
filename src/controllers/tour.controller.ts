@@ -8,6 +8,7 @@ import {
   type CreateTourReq,
   createTour,
   deleteTour,
+  getFilteredTours,
   getTourbyId,
   getTours,
   updateTour
@@ -26,6 +27,35 @@ export const showTours = async (_req: Request, res: Response) => {
     res
       .status(500)
       .json({ errors: [{ message: 'Error at listing the tours' }] });
+  }
+};
+
+export const showMyTours = async (req: AuthRequest, res: Response) => {
+  try {
+    const { travelAgencyId } = AuthReqHasValues(req, 'travelAgencyId');
+
+    const tours = await getFilteredTours({ agencyId: travelAgencyId }, true);
+
+    res.status(200).json({
+      message: 'Tours retrieved successfully!',
+      data: tours
+    });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error && error.message.includes('required')) {
+      res.status(403).json({
+        errors: [
+          {
+            message:
+              'Only users registered as travel agency can list their tours'
+          }
+        ]
+      });
+    } else {
+      res
+        .status(500)
+        .json({ errors: [{ message: 'Error at listing your tours' }] });
+    }
   }
 };
 

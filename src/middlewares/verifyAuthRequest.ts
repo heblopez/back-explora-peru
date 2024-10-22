@@ -43,7 +43,7 @@ export const AuthReqHasValues = (
 ): OnlyAuthRequest => {
   for (const key of keys) {
     if (req[key] === undefined) {
-      throw new Error(`Error: ${key} is required`);
+      throw new Error(`${key} is required`);
     }
   }
 
