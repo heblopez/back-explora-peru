@@ -6,7 +6,7 @@ import type { TouristEntry } from '../schemas/tourist.schema';
 import { createTravelAgency } from '../services/agency.services';
 import { createAuthResponse } from '../services/auth.services';
 import { createTourist } from '../services/tourist.services';
-import { findUserByEmail } from '../services/user.services';
+import { findUserByEmail, updateUser } from '../services/user.services';
 
 export const registerTourist = async (req: Request, res: Response) => {
   try {
@@ -30,17 +30,22 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body as LoginEntry;
 
-    const user = await findUserByEmail(email);
+    const userFound = await findUserByEmail(email);
 
-    if (!user) {
+    if (!userFound) {
       throw new Error('User not found');
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      userFound.password
+    );
 
     if (!isPasswordCorrect) {
       throw new Error('Incorrect password');
     }
+
+    const user = await updateUser(userFound.userId, { lastLogin: new Date() });
 
     const resAuth = createAuthResponse(user);
     res.status(200).json({
