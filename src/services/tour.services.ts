@@ -64,7 +64,8 @@ export const createTour = async (data: CreateTourReq): Promise<Tour> => {
         }
       },
       include: {
-        places: true
+        places: true,
+        schedules: true
       }
     });
   } catch (error) {
