@@ -29,7 +29,7 @@ export const getFilteredTours = async (
       where: {
         OR: [
           { agencyId: filter.agencyId },
-          { tourName: { contains: filter.tourName } }
+          { tourName: { contains: filter.tourName, mode: 'insensitive' } }
         ],
         AND: [
           { price: { gte: filter.priceMin } },
@@ -50,17 +50,24 @@ export const getFilteredTours = async (
 
 export interface CreateTourReq extends Tour {
   places?: Prisma.PlaceCreateInput[];
+  schedules?: Prisma.ScheduleCreateInput[];
 }
 
 export const createTour = async (data: CreateTourReq): Promise<Tour> => {
   try {
-    const { places, ...tourWithoutPlaces } = data;
+    const { places, schedules, ...tourWithoutPlaces } = data;
+
+    const regions = places ? new Set(places.map((place) => place.region)) : [];
 
     return await prisma.tour.create({
       data: {
         ...tourWithoutPlaces,
+        regions: regions instanceof Set ? Array.from(regions) : regions,
         places: {
           create: places
+        },
+        schedules: {
+          create: schedules
         }
       },
       include: {
