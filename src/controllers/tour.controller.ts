@@ -10,13 +10,22 @@ import {
   deleteTour,
   getFilteredTours,
   getTourbyId,
-  getTours,
   updateTour
 } from '../services/tour.services';
 
-export const showTours = async (_req: Request, res: Response) => {
+export const showTours = async (req: Request, res: Response) => {
   try {
-    const tours = await getTours();
+    const { name, region, minPrice, maxPrice } = req.query;
+    console.log(req.query);
+
+    const filter = {
+      tourName: name ? (name as string) : '',
+      region: region ? (region as string) : '',
+      minPrice: Math.max(Number(minPrice) || 0, 0),
+      maxPrice: Math.min(Number(maxPrice) || 1000, 1000)
+    };
+
+    const tours = await getFilteredTours(filter);
 
     res.status(200).json({
       message: 'Tours retrieved successfully!',

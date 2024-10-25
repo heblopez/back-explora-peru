@@ -15,8 +15,9 @@ export const getTours = async (): Promise<Tour[]> => {
 export interface TourFilter {
   agencyId?: number;
   tourName?: string;
-  priceMin?: number;
-  priceMax?: number;
+  region?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export const getFilteredTours = async (
@@ -27,14 +28,13 @@ export const getFilteredTours = async (
   try {
     const tours = await prisma.tour.findMany({
       where: {
-        OR: [
-          { agencyId: filter.agencyId },
-          { tourName: { contains: filter.tourName, mode: 'insensitive' } }
-        ],
-        AND: [
-          { price: { gte: filter.priceMin } },
-          { price: { lte: filter.priceMax } }
-        ]
+        agencyId: filter.agencyId,
+        tourName: { contains: filter.tourName, mode: 'insensitive' },
+        regions: { has: filter.region },
+        price: {
+          gte: filter.minPrice,
+          lte: filter.maxPrice
+        }
       },
       include: {
         places: withPlaces,
