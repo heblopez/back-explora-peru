@@ -26,14 +26,18 @@ export const getFilteredTours = async (
   withSchedules = false
 ): Promise<Tour[]> => {
   try {
+    const { agencyId, tourName, region, minPrice, maxPrice } = filter;
+
     const tours = await prisma.tour.findMany({
       where: {
-        agencyId: filter.agencyId,
-        tourName: { contains: filter.tourName, mode: 'insensitive' },
-        regions: { has: filter.region },
+        ...(agencyId && { agencyId }),
+        ...(tourName && {
+          tourName: { contains: tourName, mode: 'insensitive' }
+        }),
+        ...(region && { regions: { has: region } }),
         price: {
-          gte: filter.minPrice,
-          lte: filter.maxPrice
+          gte: minPrice,
+          lte: maxPrice
         }
       },
       include: {
