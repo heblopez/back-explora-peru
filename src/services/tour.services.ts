@@ -62,11 +62,15 @@ export const createTour = async (data: CreateTourReq): Promise<Tour> => {
     const { places, schedules, ...tourWithoutPlaces } = data;
 
     const regions = places ? new Set(places.map((place) => place.region)) : [];
+    const days = schedules
+      ? new Set(schedules.map((schedule) => schedule.startDay))
+      : [];
 
     return await prisma.tour.create({
       data: {
         ...tourWithoutPlaces,
         regions: regions instanceof Set ? Array.from(regions) : regions,
+        days: days instanceof Set ? Array.from(days) : days,
         places: {
           create: places
         },
@@ -87,7 +91,8 @@ export const createTour = async (data: CreateTourReq): Promise<Tour> => {
 
 export const getTourbyId = async (
   tourId: number,
-  withPlaces = true
+  withPlaces = true,
+  withSchedules = true
 ): Promise<Tour> => {
   try {
     const tour = await prisma.tour.findUnique({
@@ -95,7 +100,8 @@ export const getTourbyId = async (
         tourId
       },
       include: {
-        places: withPlaces
+        places: withPlaces,
+        schedules: withSchedules
       }
     });
 
