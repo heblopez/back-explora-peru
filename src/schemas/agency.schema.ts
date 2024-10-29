@@ -14,7 +14,10 @@ export const newTravelAgencySchema = z.object({
   agencyName: z
     .string()
     .min(2, 'The name is required and must be at least 2 characters long'),
-  agencyDescription: z.string().optional(),
+  agencyDescription: z
+    .string()
+    .max(500, 'The description must have maximum 500 characters')
+    .optional(),
   ruc: z
     .string({ invalid_type_error: 'The RUC must be a string' })
     .length(11, 'The RUC must be 11 characters long'),
