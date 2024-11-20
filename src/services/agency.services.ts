@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { PrismaClient, type TravelAgency } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import type {

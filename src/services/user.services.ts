@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { type Prisma, PrismaClient, type User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import type { UserWithRelations } from '../schemas/login.schema';
