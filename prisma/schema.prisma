@@ -153,6 +153,7 @@ model Session {
   tour              Tour      @relation(fields: [tourId], references: [tourId])
   bookings          Booking[]
 
+  @@unique([tourId, sessionDate])
   @@map("sessions")
 }
 
