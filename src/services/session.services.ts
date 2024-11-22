@@ -72,3 +72,18 @@ export const findTourSession = async (
     throw new Error('Error finding the tour session');
   }
 };
+
+export const getTourSessionById = async (
+  sessionId: number
+): Promise<Session | null> => {
+  try {
+    return await prisma.session.findUnique({
+      where: {
+        sessionId
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error finding the tour session');
+  }
+};
