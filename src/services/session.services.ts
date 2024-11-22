@@ -22,8 +22,8 @@ export const createTourSession = async (data: {
 };
 
 export const getTourSessionsbyDate = async (
-  tourId?: number,
-  date?: Date | string,
+  tourId: number,
+  date: Date | string,
   rangeOfDays?: number
 ): Promise<Session[]> => {
   try {
@@ -32,17 +32,6 @@ export const getTourSessionsbyDate = async (
 
     const endDate = new Date(date as string);
     endDate.setHours(23, 59, 59, 999);
-
-    if (!tourId && !date) {
-      return await prisma.session.findMany({
-        where: {
-          sessionDate: {
-            gte: startDate,
-            lte: endDate
-          }
-        }
-      });
-    }
 
     if (rangeOfDays) endDate.setDate(endDate.getDate() + rangeOfDays);
 
