@@ -85,3 +85,4 @@ yarn.lock
 
 # Env files
 .env
+.vercel
