@@ -148,12 +148,13 @@ model Schedule {
 model Session {
   sessionId         Int       @id @default(autoincrement()) @map("session_id")
   tourId            Int       @map("tour_id")
-  sessionDate       DateTime  @map("session_date")
+  startDate       DateTime  @map("start_date")
+  endDate         DateTime @map("end_date")
   reservedAttendees Int       @default(0) @map("reserved_attendees")
   tour              Tour      @relation(fields: [tourId], references: [tourId])
   bookings          Booking[]
 
-  @@unique([tourId, sessionDate])
+  @@unique([tourId, startDate])
   @@map("sessions")
 }
 
