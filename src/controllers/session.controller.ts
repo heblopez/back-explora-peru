@@ -6,11 +6,12 @@ import {
 
 export const registerTourSession = async (req: Request, res: Response) => {
   try {
-    const { tourId, sessionDate } = req.body;
+    const { tourId, startDate, endDate } = req.body;
 
     const newSession = await createTourSession({
       tourId: Number(tourId),
-      sessionDate: new Date(sessionDate)
+      startDate: new Date(startDate),
+      endDate: new Date(endDate)
     });
 
     res.status(201).json({
@@ -27,7 +28,7 @@ export const registerTourSession = async (req: Request, res: Response) => {
 
 export const getTourSessions = async (req: Request, res: Response) => {
   try {
-    const { tourId, sessionDate, rangeOfDays } = req.query;
+    const { tourId, startDate, rangeOfDays } = req.query;
 
     if (!tourId) {
       res.status(400).json({
@@ -37,7 +38,7 @@ export const getTourSessions = async (req: Request, res: Response) => {
 
     const sessions = await getTourSessionsbyDate(
       Number(tourId),
-      sessionDate ? new Date(sessionDate as string) : new Date(),
+      startDate ? new Date(startDate as string) : new Date(),
       Number(rangeOfDays || 0)
     );
 

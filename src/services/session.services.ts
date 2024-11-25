@@ -4,15 +4,17 @@ const prisma = new PrismaClient();
 
 export const createTourSession = async (data: {
   tourId: number;
-  sessionDate: Date | string;
+  startDate: Date | string;
+  endDate: Date | string;
 }): Promise<Session> => {
   try {
-    const { tourId, sessionDate } = data;
+    const { tourId, startDate, endDate } = data;
 
     return await prisma.session.create({
       data: {
         tourId,
-        sessionDate
+        startDate,
+        endDate
       }
     });
   } catch (error) {
@@ -27,22 +29,23 @@ export const getTourSessionsbyDate = async (
   rangeOfDays?: number
 ): Promise<Session[]> => {
   try {
-    const startDate = new Date(date as string);
-    startDate.setHours(0, 0, 0, 0);
+    const filterStartDate = new Date(date as string);
+    filterStartDate.setHours(0, 0, 0, 0);
 
-    const endDate = new Date(date as string);
-    endDate.setHours(23, 59, 59, 999);
+    const filterEndDate = new Date(date as string);
+    filterEndDate.setHours(23, 59, 59, 999);
 
-    if (rangeOfDays) endDate.setDate(endDate.getDate() + rangeOfDays);
+    if (rangeOfDays)
+      filterEndDate.setDate(filterEndDate.getDate() + rangeOfDays);
 
     return await prisma.session.findMany({
       where: {
         AND: [
           { tourId },
           {
-            sessionDate: {
-              gte: startDate,
-              lte: endDate
+            startDate: {
+              gte: filterStartDate,
+              lte: filterEndDate
             }
           }
         ]
@@ -56,14 +59,14 @@ export const getTourSessionsbyDate = async (
 
 export const findTourSession = async (
   tourId: number,
-  sessionDate: Date | string
+  startDate: Date | string
 ): Promise<Session | null> => {
   try {
     return await prisma.session.findUnique({
       where: {
-        tourId_sessionDate: {
+        tourId_startDate: {
           tourId,
-          sessionDate
+          startDate
         }
       }
     });

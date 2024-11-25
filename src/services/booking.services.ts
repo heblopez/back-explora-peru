@@ -34,10 +34,10 @@ export const createBookingAndUpdateSession = async (data: {
     const { sessionId, touristId, totalPrice } = data;
     return prisma.$transaction(async () => {
       const session = await getTourSessionById(sessionId);
-      if (!session) throw new Error('403 - Session not found');
+      if (!session) throw new Error('404 - Session not found');
 
       const tour = await getTourbyId(session.tourId);
-      if (!tour) throw new Error('403 - Tour not found');
+      if (!tour) throw new Error('404 - Tour not found');
 
       const { maxGroupSize } = tour;
       const numberOfAttendees = data.numberOfAttendees || 1;
