@@ -57,25 +57,6 @@ export const getTourSessionsbyDate = async (
   }
 };
 
-export const findTourSession = async (
-  tourId: number,
-  startDate: Date | string
-): Promise<Session | null> => {
-  try {
-    return await prisma.session.findUnique({
-      where: {
-        tourId_startDate: {
-          tourId,
-          startDate
-        }
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    throw new Error('Error finding the tour session');
-  }
-};
-
 export const getTourSessionById = async (
   sessionId: number
 ): Promise<Session | null> => {
@@ -88,5 +69,37 @@ export const getTourSessionById = async (
   } catch (error) {
     console.error(error);
     throw new Error('Error finding the tour session');
+  }
+};
+
+export const findOrCreateTourSession = async (data: {
+  tourId: number;
+  startDate: Date | string;
+  endDate: Date | string;
+}): Promise<Session | null> => {
+  try {
+    const { tourId, startDate, endDate } = data;
+
+    const session = await prisma.session.findUnique({
+      where: {
+        tourId_startDate: {
+          tourId,
+          startDate
+        }
+      }
+    });
+
+    if (session) return session;
+
+    return await prisma.session.create({
+      data: {
+        tourId,
+        startDate,
+        endDate
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error finding or creating the tour session');
   }
 };

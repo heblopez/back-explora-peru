@@ -4,6 +4,6 @@ import { verifyAuthRequest } from '../middlewares/verifyAuthRequest';
 
 const bookingRouter = Router();
 
-bookingRouter.post('/booking', verifyAuthRequest, makeBooking);
+bookingRouter.post('/bookings', verifyAuthRequest, makeBooking);
 
 export default bookingRouter;
