@@ -3,12 +3,13 @@ import { createBookingAndUpdateSession } from '../services/booking.services';
 
 export const makeBooking = async (req: Request, res: Response) => {
   try {
-    const { sessionId, touristId, totalPrice } = req.body;
+    const { sessionId, touristId, numberOfAttendees, totalPrice } = req.body;
 
     const result = await createBookingAndUpdateSession({
       sessionId: Number(sessionId),
       touristId: Number(touristId),
-      totalPrice: Number(totalPrice)
+      totalPrice: Number(totalPrice),
+      ...(numberOfAttendees && { numberOfAttendees: Number(numberOfAttendees) })
     });
 
     res.status(201).json({
