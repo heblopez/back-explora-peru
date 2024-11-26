@@ -87,7 +87,11 @@ export const getBookingsByTourist = async (touristId: number) => {
       include: {
         session: {
           include: {
-            tour: true
+            tour: {
+              include: {
+                agency: true
+              }
+            }
           }
         }
       }
@@ -95,10 +99,12 @@ export const getBookingsByTourist = async (touristId: number) => {
 
     const bookingsFormatted = bookings.map((booking) => {
       const { tour, ...sessionWithoutTour } = booking.session;
+      const { agency, ...tourWithoutAgency } = tour;
       const bookingFmt = {
         ...booking,
         session: sessionWithoutTour,
-        tour
+        tour: tourWithoutAgency,
+        agency
       };
 
       return bookingFmt;
