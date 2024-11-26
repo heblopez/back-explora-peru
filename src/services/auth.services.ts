@@ -11,7 +11,7 @@ export interface AuthPayload {
 }
 
 export const signToken = (payload: AuthPayload): string => {
-  return jwt.sign(payload, SECRET_JWT_KEY, { expiresIn: '2h' });
+  return jwt.sign(payload, SECRET_JWT_KEY, { expiresIn: '6h' });
 };
 
 export const verifyToken = (token: string): AuthPayload => {
