@@ -77,3 +77,35 @@ export const createBookingAndUpdateSession = async (data: {
     throw new Error('Error creating the booking');
   }
 };
+
+export const getBookingsByTourist = async (touristId: number) => {
+  try {
+    const bookings = await prisma.booking.findMany({
+      where: {
+        touristId
+      },
+      include: {
+        session: {
+          include: {
+            tour: true
+          }
+        }
+      }
+    });
+
+    const bookingsFormatted = bookings.map((booking) => {
+      const { tour, ...sessionWithoutTour } = booking.session;
+      const bookingFmt = {
+        ...booking,
+        session: sessionWithoutTour,
+        tour
+      };
+
+      return bookingFmt;
+    });
+    return bookingsFormatted;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error getting the bookings');
+  }
+};

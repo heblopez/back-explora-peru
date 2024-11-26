@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export const {
   HOSTNAME = 'localhost',
   PORT = 3000,
