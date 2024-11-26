@@ -6,6 +6,7 @@ import { HOSTNAME, PORT } from './config';
 import swaggerJson from './openapi.json';
 import authRouter from './routes/auth.routes';
 import bookingRouter from './routes/booking.routes';
+import sessionRouter from './routes/session.routes';
 import tourRouter from './routes/tour.routes';
 
 const app = express();
@@ -30,6 +31,7 @@ const welcomeListener = (_req: Request, res: Response) => {
 app.get('/', welcomeListener);
 app.use('/api/auth', authRouter);
 app.use('/api', tourRouter);
+app.use('/api', sessionRouter);
 app.use('/api', bookingRouter);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJson));

@@ -1,13 +1,15 @@
 import type { Request, Response } from 'express';
+import { AuthReqHasValues } from '../middlewares/verifyAuthRequest';
 import { createBookingAndUpdateSession } from '../services/booking.services';
 
 export const makeBooking = async (req: Request, res: Response) => {
   try {
-    const { sessionId, touristId, numberOfAttendees, totalPrice } = req.body;
+    const { touristId } = AuthReqHasValues(req, 'touristId');
+    const { sessionId, numberOfAttendees, totalPrice } = req.body;
 
     const result = await createBookingAndUpdateSession({
       sessionId: Number(sessionId),
-      touristId: Number(touristId),
+      touristId: touristId,
       totalPrice: Number(totalPrice),
       ...(numberOfAttendees && { numberOfAttendees: Number(numberOfAttendees) })
     });
