@@ -125,7 +125,7 @@ export const updateATour = async (req: AuthRequest, res: Response) => {
       throw new Error('Error: Data to be updated is required');
     }
 
-    const currentTour = await getTourbyId(Number(tourId), false);
+    const currentTour = await getTourbyId(Number(tourId), false, false);
     if (currentTour.agencyId !== travelAgencyId) {
       res.status(403).json({
         errors: [{ message: 'You are not authorized to update this tour' }]
