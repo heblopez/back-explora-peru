@@ -127,7 +127,7 @@ model Place {
   coordinates String[]
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-  tour        Tour     @relation(fields: [tourId], references: [tourId])
+  tour        Tour     @relation(fields: [tourId], references: [tourId], onDelete: Cascade)
   tourId      Int      @map("tour_id")
 
   @@map("places")
@@ -140,7 +140,7 @@ model Schedule {
   startTime  String     @map("start_time")
   endDay     DayOfWeek? @map("end_day")
   endTime    String?    @map("end_time")
-  tour       Tour       @relation(fields: [tourId], references: [tourId])
+  tour       Tour       @relation(fields: [tourId], references: [tourId], onDelete: Cascade)
 
   @@map("schedules")
 }
@@ -148,10 +148,10 @@ model Schedule {
 model Session {
   sessionId         Int       @id @default(autoincrement()) @map("session_id")
   tourId            Int       @map("tour_id")
-  startDate       DateTime  @map("start_date")
-  endDate         DateTime @map("end_date")
+  startDate         DateTime  @map("start_date")
+  endDate           DateTime  @map("end_date")
   reservedAttendees Int       @default(0) @map("reserved_attendees")
-  tour              Tour      @relation(fields: [tourId], references: [tourId])
+  tour              Tour      @relation(fields: [tourId], references: [tourId], onDelete: Cascade)
   bookings          Booking[]
 
   @@unique([tourId, startDate])
