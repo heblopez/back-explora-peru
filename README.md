@@ -1,6 +1,6 @@
-# 📞 Explora Peru API - Backend with TypeScript and Express
+# 💼🎒 Explora Peru API - Backend with TypeScript and Express
 
-The backend of the ExploraPerú project, designed to promote tourism in Peru, was developed using Node.js, Express, and TypeScript. This system provides a RESTful API to manage a list of tours, enabling create, read, update, and delete (CRUD) operations. It also handles information about users, travel agencies, bookings, payments, reviews, and more, utilizing PostgreSQL as the database. With this infrastructure, tourists can book tours offered by certified agencies, enhancing their exploration experience in the country.
+The backend of the ExploraPerú project, designed to promote tourism in Peru, was developed using Node.js, Express, and TypeScript. This system provides a RESTful API to manage a list of tours, enabling create, read, update, and delete (CRUD) operations. It also handles information about users, travel agencies, bookings and more, utilizing PostgreSQL as the database. With this infrastructure, tourists can book tours offered by certified agencies, enhancing their exploration experience in the country.
 
 ## 📑 Table of Contents
 
@@ -16,7 +16,7 @@ The backend of the ExploraPerú project, designed to promote tourism in Peru, wa
 
 ## 🚀 Features
 
-- CRUD operations for contacts: create, read, update, and delete persons.
+- CRUD operations for contacts: create, read, update, and delete tours.
 - Uses TypeScript for safe typing and better code maintenance.
 - Organized project structure for easy scalability.
 - Input data validation.
@@ -35,17 +35,31 @@ The backend of the ExploraPerú project, designed to promote tourism in Peru, wa
 ## 📂 Project Structure
 
 ```bash
-📁 persons-api/
-├── 📁 src/
-│   ├── 📄 index.ts            # Application entry point
-│   ├── 📁 controllers/        # Controllers for managing persons
-│   │   └── 📄 info.controller.ts
-│   │   └── 📄 persons.controller.ts
-│   ├── 📁 data/
-│   │   └── 📄 persons.ts      # Mock data
-│   └── 📁 routes              # Server route definitions
-│       └── 📄 info.routes.ts
-│       └── 📄 person.routes.ts
+📁src/
+├── 📁controllers/             # Handle incoming requests
+│   ├── auth.controller.ts   # Authentication-related logic
+│   ├── booking.controller.ts # Booking-related logic
+│   ├── session.controller.ts # Session-related logic
+│   └── tour.controller.ts    # Tour-related logic
+├── 📁middlewares/             # Middleware functions
+│   ├── validateRequest.ts   # Request validation logic
+│   └── verifyAuthRequest.ts # Authorization middleware
+├── 📁routes/                  # Route definitions
+│   ├── auth.routes.ts       # Auth routes
+│   ├── booking.routes.ts    # Booking routes
+│   ├── session.routes.ts    # Session routes
+│   └── tour.routes.ts       # Tour routes
+├── 📁schemas/                 # Data validation schemas
+│   ├── agency.schema.ts     # Schema for agencies
+│   ├── login.schema.ts      # Schema for login
+│   └── tourist.schema.ts    # Schema for tourists
+├── 📁services/                # Business logic
+│   ├── agency.services.ts   # Agency-related logic
+│   ├── auth.services.ts     # Authentication-related logic
+│   ├── booking.services.ts  # Booking-related logic
+│   ├── session.services.ts  # Session-related logic
+│   ├── tour.services.ts     # Tour-related logic
+│   └── user.services.ts     # User-related logic
 ├── 📄 .gitignore             # Git ignore file
 ├── 📄 .prettierrc            # Prettier configuration
 ├── 📄 eslint.config.mjs       # ESLint configuration
@@ -54,13 +68,13 @@ The backend of the ExploraPerú project, designed to promote tourism in Peru, wa
 └── 📄 tsconfig.json           # TypeScript configuration
 ```
 
+
 ## ⚙️ Installation
 
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/heblopez/persons-api.git
-cd persons-api
+git clone (https://github.com/heblopez/back-explora-peru.git)
 ```
 
 2. Install the dependencies:
@@ -93,12 +107,6 @@ npm start    # The server will be available at http://localhost:3000 by default.
 | POST   | `/auth/register`       | Register a new user (tourist or travel agency).  |
 | POST   | `/auth/logout`         | Log out a user.                                  |
 
-### Users
-| Method | Route                   | Description                                       |
-| ------ | ----------------------- | ------------------------------------------------- |
-| GET    | `/users/:id`           | Get user information.                            |
-| PUT    | `/users/:id`           | Update user information.                         |
-| DELETE | `/users/:id`           | Delete a user account.                           |
 
 ### Travel Agencies
 | Method | Route                   | Description                                       |
@@ -113,40 +121,16 @@ npm start    # The server will be available at http://localhost:3000 by default.
 | GET    | `/tours`                | List all available tours.                        |
 | GET    | `/tours/:id`           | Get details for a specific tour.                |
 | POST   | `/tours`               | Create a new tour (requires agency authentication). |
-| PUT    | `/tours/:id`           | Update a tour.                                  |
+| PATCH    | `/tours/:id`           | Update a tour.                                  |
 | DELETE | `/tours/:id`           | Delete a tour.                                  |
 
 ### Bookings
 | Method | Route                   | Description                                       |
 | ------ | ----------------------- | ------------------------------------------------- |
-| GET    | `/bookings`            | List all bookings (requires authentication).     |
-| POST   | `/bookings`            | Create a new tour booking.                       |
-| PUT    | `/bookings/:id`        | Update an existing booking.                      |
-| DELETE | `/bookings/:id`        | Cancel a booking.                                |
+| GET    | `/bookings`            | List my bookings as tourist user(requires authentication).     |
+| POST   | `/bookings`            | Make a new booking.                       |
 
-### Payments
-| Method | Route                   | Description                                       |
-| ------ | ----------------------- | ------------------------------------------------- |
-| POST   | `/payments`            | Process a payment.                               |
-| GET    | `/payments/:id`        | Get details of a payment.                        |
 
-### Reviews
-| Method | Route                   | Description                                       |
-| ------ | ----------------------- | ------------------------------------------------- |
-| POST   | `/reviews`             | Add a review for a tour.                         |
-| GET    | `/reviews/:tourId`     | Get reviews for a specific tour.                 |
-
-### Chat and Messaging
-| Method | Route                   | Description                                       |
-| ------ | ----------------------- | ------------------------------------------------- |
-| GET    | `/chat/:touristId/:agencyId` | Get chat history between a tourist and an agency. |
-| POST   | `/messages`            | Send a message in a chat.                        |
-
-### Additional Routes
-| Method | Route                   | Description                                       |
-| ------ | ----------------------- | ------------------------------------------------- |
-| GET    | `/regions`             | List all regions available for tours.            |
-| GET    | `/languages`           | Get the available languages for tour guides.     |
 
 ## 🛠️ Technologies Used
 
