@@ -5,6 +5,7 @@ import type { LoginEntry } from '../schemas/login.schema';
 import type { TouristEntry } from '../schemas/tourist.schema';
 import { createTravelAgency } from '../services/agency.services';
 import { createAuthResponse } from '../services/auth.services';
+import { sendWelcomeEmail } from '../services/email.services';
 import { createTourist } from '../services/tourist.services';
 import { findUserByEmail, updateUser } from '../services/user.services';
 
@@ -13,6 +14,8 @@ export const registerTourist = async (req: Request, res: Response) => {
     const dataNewTourist = req.body as TouristEntry;
 
     const newTourist = await createTourist(dataNewTourist);
+
+    await sendWelcomeEmail(dataNewTourist.email, dataNewTourist.firstName);
 
     res.status(201).json({
       message: 'Tourist registered successfully!',
