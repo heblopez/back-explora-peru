@@ -8,6 +8,7 @@ import authRouter from './routes/auth.routes';
 import bookingRouter from './routes/booking.routes';
 import sessionRouter from './routes/session.routes';
 import tourRouter from './routes/tour.routes';
+import userRouter from './routes/user.routes';
 
 const app = express();
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use('/api/auth', authRouter);
 app.use('/api', tourRouter);
 app.use('/api', sessionRouter);
 app.use('/api', bookingRouter);
+app.use('/api', userRouter);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
