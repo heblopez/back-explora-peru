@@ -59,7 +59,9 @@ export const findUserByEmail = async (
 
 export const updateUser = async (
   userId: number,
-  data: Prisma.UserUpdateInput
+  data: Prisma.UserUpdateInput,
+  withTourist = true,
+  withTravelAgency = true
 ) => {
   try {
     if (data.password) {
@@ -69,7 +71,11 @@ export const updateUser = async (
 
     const user = await prisma.user.update({
       data,
-      where: { userId }
+      where: { userId },
+      include: {
+        tourist: withTourist,
+        travelAgency: withTravelAgency
+      }
     });
 
     if (!user) {
