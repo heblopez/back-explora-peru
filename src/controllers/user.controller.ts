@@ -21,11 +21,12 @@ export const updateUserData = async (req: AuthRequest, res: Response) => {
 
     if (!userId) throw new Error('User not found');
 
-    const { password, ...updatedUser } = await updateUser(userId, data);
+    const updatedUser = await updateUser(userId, data);
+    const { password, ...resUpdatedUser } = updatedUser;
 
     res.status(200).json({
       message: 'User updated successfully!',
-      data: updatedUser
+      data: resUpdatedUser
     });
   } catch (error) {
     console.error(error);

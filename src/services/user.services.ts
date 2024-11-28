@@ -69,11 +69,7 @@ export const updateUser = async (
 
     const user = await prisma.user.update({
       data,
-      where: { userId },
-      include: {
-        tourist: true,
-        travelAgency: true
-      }
+      where: { userId }
     });
 
     if (!user) {
