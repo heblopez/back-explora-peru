@@ -52,3 +52,22 @@ export const createTourist = async (
     throw new Error('Error when creating the tourist');
   }
 };
+
+export const findTouristById = async (touristId: number) => {
+  try {
+    const tourist = await prisma.tourist.findUnique({
+      where: {
+        touristId
+      }
+    });
+
+    if (!tourist) {
+      throw new Error('Tourist not found');
+    }
+
+    return tourist;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error at finding the tourist by id');
+  }
+};

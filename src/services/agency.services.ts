@@ -49,3 +49,22 @@ export const createTravelAgency = async (
     throw new Error('Error when creating the travel agency');
   }
 };
+
+export const findTravelAgencyById = async (travelAgencyId: number) => {
+  try {
+    const travelAgency = await prisma.travelAgency.findUnique({
+      where: {
+        travelAgencyId
+      }
+    });
+
+    if (!travelAgency) {
+      throw new Error('Travel Agency not found');
+    }
+
+    return travelAgency;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error at finding the travel agency by id');
+  }
+};
