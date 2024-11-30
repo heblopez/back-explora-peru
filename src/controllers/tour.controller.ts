@@ -16,18 +16,29 @@ import {
 
 export const showTours = async (req: Request, res: Response) => {
   try {
-    const { name, region, minPrice, maxPrice } = req.query;
+    const { name, region, minPrice, maxPrice, sortBy } = req.query;
 
     let tours: Tour[];
 
     if (Object.keys(req.query).length === 0) {
       tours = await getTours();
     } else {
+      if (
+        sortBy &&
+        !['newest', 'min-price', 'max-price'].includes(sortBy as string)
+      ) {
+        res.status(400).json({
+          errors: [{ message: 'Invalid sortBy value' }]
+        });
+        return;
+      }
+
       const filter = {
         tourName: name ? (name as string) : '',
         region: region ? (region as string) : '',
         minPrice: Math.max(Number(minPrice) || 0, 0),
-        maxPrice: Math.min(Number(maxPrice) || 1000, 1000)
+        maxPrice: Math.min(Number(maxPrice) || 1000, 1000),
+        sortBy: sortBy as 'newest' | 'min-price' | 'max-price' | undefined
       };
       tours = await getFilteredTours(filter);
     }

@@ -18,6 +18,7 @@ export interface TourFilter {
   region?: string;
   minPrice?: number;
   maxPrice?: number;
+  sortBy?: 'newest' | 'min-price' | 'max-price';
 }
 
 export const getFilteredTours = async (
@@ -26,7 +27,19 @@ export const getFilteredTours = async (
   withSchedules = false
 ): Promise<Tour[]> => {
   try {
-    const { agencyId, tourName, region, minPrice, maxPrice } = filter;
+    const { agencyId, tourName, region, minPrice, maxPrice, sortBy } = filter;
+
+    function getOrderBy(sortBy?: string) {
+      if (!sortBy) return undefined;
+
+      const sortOptions: Record<string, { [key: string]: 'asc' | 'desc' }> = {
+        'min-price': { price: 'asc' },
+        'max-price': { price: 'desc' },
+        newest: { createdAt: 'desc' }
+      };
+
+      return sortOptions[sortBy];
+    }
 
     const tours = await prisma.tour.findMany({
       where: {
@@ -40,6 +53,7 @@ export const getFilteredTours = async (
           lte: maxPrice
         }
       },
+      orderBy: getOrderBy(sortBy),
       include: {
         places: withPlaces,
         schedules: withSchedules
